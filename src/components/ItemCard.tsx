@@ -1,5 +1,5 @@
-import React from 'react';
-import { Item } from '../types';
+import React from 'react'
+import { Item } from '../types'
 
 interface ItemCardProps {
   item: Item;
@@ -25,5 +25,5 @@ export default function ItemCard({ item }: ItemCardProps) {
         <p className="text-gray-600">{item.description}</p>
       </div>
     </div>
-  );
+  )
 }

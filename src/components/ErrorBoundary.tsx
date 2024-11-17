@@ -1,5 +1,5 @@
-import React, { Component, ErrorInfo } from "react";
-import { AlertTriangle } from "lucide-react";
+import React, { Component, ErrorInfo } from 'react'
+import { AlertTriangle } from 'lucide-react'
 
 interface Props {
   children: React.ReactNode;
@@ -12,23 +12,23 @@ interface State {
 
 export default class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
-    super(props);
+    super(props)
     this.state = {
       hasError: false,
       error: null,
-    };
+    }
   }
 
   static getDerivedStateFromError(error: Error): State {
     return {
       hasError: true,
       error,
-    };
+    }
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Log error to your preferred error reporting service
-    console.error("Error caught by boundary:", error, errorInfo);
+    console.error('Error caught by boundary:', error, errorInfo)
   }
 
   render() {
@@ -60,9 +60,9 @@ export default class ErrorBoundary extends Component<Props, State> {
             </button>
           </div>
         </div>
-      );
+      )
     }
 
-    return this.props.children;
+    return this.props.children
   }
 }

@@ -1,67 +1,67 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import CategoryFilter from "../CategoryFilter";
-import { describe, vi, beforeEach, it, expect } from "vitest";
-import React from "react";
+import { render, screen, fireEvent } from '@testing-library/react'
+import CategoryFilter from '../CategoryFilter'
+import { describe, vi, beforeEach, it, expect } from 'vitest'
+import React from 'react'
 
-describe("CategoryFilter", () => {
-  const mockCategories = ["Adventure", "Relaxation", "Urban"];
-  const mockOnChange = vi.fn();
+describe('CategoryFilter', () => {
+  const mockCategories = ['Adventure', 'Relaxation', 'Urban']
+  const mockOnChange = vi.fn()
 
   beforeEach(() => {
-    mockOnChange.mockClear();
-  });
+    mockOnChange.mockClear()
+  })
 
-  it("renders all categories", () => {
+  it('renders all categories', () => {
     render(
       <CategoryFilter
         categories={mockCategories}
         selectedCategory=""
         onChange={mockOnChange}
       />
-    );
+    )
 
-    expect(screen.getByText("All Categories")).toBeInTheDocument();
+    expect(screen.getByText('All Categories')).toBeInTheDocument()
     mockCategories.forEach((category) => {
-      expect(screen.getByText(category)).toBeInTheDocument();
-    });
-  });
+      expect(screen.getByText(category)).toBeInTheDocument()
+    })
+  })
 
-  it("shows selected category", () => {
+  it('shows selected category', () => {
     render(
       <CategoryFilter
         categories={mockCategories}
         selectedCategory="Adventure"
         onChange={mockOnChange}
       />
-    );
+    )
 
-    expect(screen.getByDisplayValue("Adventure")).toBeInTheDocument();
-  });
+    expect(screen.getByDisplayValue('Adventure')).toBeInTheDocument()
+  })
 
-  it("calls onChange when selection changes", () => {
+  it('calls onChange when selection changes', () => {
     render(
       <CategoryFilter
         categories={mockCategories}
         selectedCategory=""
         onChange={mockOnChange}
       />
-    );
+    )
 
-    fireEvent.change(screen.getByRole("combobox"), {
-      target: { value: "Adventure" },
-    });
+    fireEvent.change(screen.getByRole('combobox'), {
+      target: { value: 'Adventure' },
+    })
 
-    expect(mockOnChange).toHaveBeenCalledWith("Adventure");
-  });
+    expect(mockOnChange).toHaveBeenCalledWith('Adventure')
+  })
 
-  it("renders filter icon", () => {
+  it('renders filter icon', () => {
     render(
       <CategoryFilter
         categories={mockCategories}
         selectedCategory=""
         onChange={mockOnChange}
       />
-    );
-    expect(screen.getByTestId("filter")).toBeInTheDocument();
-  });
-});
+    )
+    expect(screen.getByTestId('filter')).toBeInTheDocument()
+  })
+})

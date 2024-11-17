@@ -1,5 +1,5 @@
-import { UserButton } from '@clerk/clerk-react';
-import { Outlet } from 'react-router-dom';
+import { UserButton } from '@clerk/clerk-react'
+import { Outlet } from 'react-router-dom'
 
 export default function Layout() {
   return (
@@ -14,5 +14,5 @@ export default function Layout() {
         <Outlet />
       </main>
     </div>
-  );
+  )
 }

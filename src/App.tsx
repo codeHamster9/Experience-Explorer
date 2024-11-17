@@ -1,13 +1,13 @@
-import { ClerkProvider, SignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import FilterableList from "./components/FilterableList";
-import Layout from "./components/Layout";
-import ErrorBoundary from "./components/ErrorBoundary";
+import { ClerkProvider, SignIn, SignedIn, SignedOut } from '@clerk/clerk-react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import FilterableList from './components/FilterableList'
+import Layout from './components/Layout'
+import ErrorBoundary from './components/ErrorBoundary'
 
-const VITE_CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const VITE_CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
 if (!VITE_CLERK_PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key");
+  throw new Error('Missing Publishable Key')
 }
 
 function App() {
@@ -37,7 +37,7 @@ function App() {
         </BrowserRouter>
       </ClerkProvider>
     </ErrorBoundary>
-  );
+  )
 }
 
-export default App;
+export default App
