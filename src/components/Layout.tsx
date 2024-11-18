@@ -1,15 +1,25 @@
 import { Outlet } from 'react-router-dom'
+import styled from 'styled-components'
 import Header from './Header'
+
+const LayoutContainer = styled.div`
+  min-height: ${({ theme }) => theme.layout.minHeight};
+  background-color: ${({ theme }) => theme.colors.gray[50]};
+`
+
+const Main = styled.main`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: ${({ theme }) => `${theme.spacing[8]} ${theme.spacing[4]}`};
+`
 
 export default function Layout() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <LayoutContainer>
       <Header />
-      
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <Main>
         <Outlet />
-      </main>
-    </div>
+      </Main>
+    </LayoutContainer>
   )
 }

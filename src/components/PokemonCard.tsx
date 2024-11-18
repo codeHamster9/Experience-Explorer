@@ -1,3 +1,4 @@
+import styled from 'styled-components'
 import { Pokemon } from '../types/pokemon'
 
 interface Props {
@@ -7,44 +8,111 @@ interface Props {
   onMoveSelect: (moveName: string) => void;
 }
 
+const Card = styled.div`
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background-color: white;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  padding: 1rem;
+`
+
+const PokemonImage = styled.img`
+  width: 8rem;
+  height: 8rem;
+  margin: 0 auto;
+`
+
+const PokemonName = styled.h2`
+  font-size: 1.25rem;
+  text-transform: capitalize;
+  text-align: center;
+  font-weight: 600;
+  color: #1f2937;
+`
+
+const HealthBarContainer = styled.div`
+  margin-top: 0.5rem;
+`
+
+const HealthBarBackground = styled.div`
+  background-color: #e5e7eb;
+  height: 1rem;
+  border-radius: 9999px;
+  overflow: hidden;
+`
+
+interface HealthBarProps {
+  percentage: number;
+  isLowHealth: boolean;
+}
+
+const HealthBar = styled.div<HealthBarProps>`
+  height: 100%;
+  border-radius: 9999px;
+  transition: all 300ms;
+  width: ${props => props.percentage}%;
+  background-color: ${props => props.isLowHealth ? '#ef4444' : '#22c55e'};
+`
+
+const HealthText = styled.p`
+  text-align: center;
+  margin-top: 0.25rem;
+`
+
+const MovesGrid = styled.div`
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+`
+
+const MoveButton = styled.button`
+  background-color: #3b82f6;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  text-transform: capitalize;
+  transition: background-color 150ms;
+
+  &:hover {
+    background-color: #2563eb;
+  }
+`
+
 export default function PokemonCard({ pokemon, hp, isPlayerTurn, onMoveSelect }: Props) {
+  const healthPercentage = (hp / pokemon.stats[0].base_stat) * 100
+  const isLowHealth = hp < pokemon.stats[0].base_stat * 0.2
+
   return (
-    <div className="border rounded-lg bg-white shadow-md p-4">
-      <img 
+    <Card>
+      <PokemonImage 
         src={pokemon.sprites.front_default} 
         alt={pokemon.name} 
-        className="w-32 h-32 mx-auto"
       />
-      <h2 className="text-xl capitalize text-center font-semibold text-gray-800">
-        {pokemon.name}
-      </h2>
-      <div className="mt-2">
-        <div className="bg-gray-200 h-4 rounded-full overflow-hidden">
-          <div 
-            className="bg-green-500 h-full rounded-full transition-all duration-300"
-            style={{ 
-              width: `${(hp / pokemon.stats[0].base_stat) * 100}%`,
-              backgroundColor: hp < pokemon.stats[0].base_stat * 0.2 ? '#ef4444' : undefined
-            }}
+      <PokemonName>{pokemon.name}</PokemonName>
+      <HealthBarContainer>
+        <HealthBarBackground>
+          <HealthBar 
+            percentage={healthPercentage}
+            isLowHealth={isLowHealth}
           />
-        </div>
-        <p className="text-center mt-1">
+        </HealthBarBackground>
+        <HealthText>
           HP: {hp}/{pokemon.stats[0].base_stat}
-        </p>
-      </div>
+        </HealthText>
+      </HealthBarContainer>
       {isPlayerTurn && (
-        <div className="mt-4 grid grid-cols-2 gap-2">
+        <MovesGrid>
           {pokemon.moves.slice(0, 4).map((move) => (
-            <button
+            <MoveButton
               key={move.move.name}
               onClick={() => onMoveSelect(move.move.name)}
-              className="bg-blue-500 text-white px-2 py-1 rounded capitalize hover:bg-blue-600 transition-colors"
             >
               {move.move.name}
-            </button>
+            </MoveButton>
           ))}
-        </div>
+        </MovesGrid>
       )}
-    </div>
+    </Card>
   )
 } 

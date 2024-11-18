@@ -1,22 +1,51 @@
 import React from 'react'
 import { Search } from 'lucide-react'
+import styled from 'styled-components'
 
 interface SearchBarProps {
   value: string;
   onChange: (value: string) => void;
 }
 
+const SearchWrapper = styled.div`
+  position: relative;
+  flex: 1;
+`
+
+const SearchIcon = styled(Search)`
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9CA3AF;
+  height: 20px;
+  width: 20px;
+`
+
+const SearchInput = styled.input`
+  width: 100%;
+  padding: 8px 16px 8px 40px;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.2s;
+
+  &:focus {
+    border-color: transparent;
+    box-shadow: 0 0 0 2px #3B82F6;
+  }
+`
+
 export default function SearchBar({ value, onChange }: SearchBarProps) {
   return (
-    <div className="flex-1 relative">
-      <Search data-testid="search" className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-      <input
+    <SearchWrapper>
+      <SearchIcon data-testid="search" />
+      <SearchInput
         type="text"
         placeholder="Search experiences..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
       />
-    </div>
+    </SearchWrapper>
   )
 }

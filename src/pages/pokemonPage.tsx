@@ -1,8 +1,65 @@
 import { useState, useEffect } from 'react'
+import styled from 'styled-components'
 import { Pokemon } from '../types/pokemon'
 import { getPokemon } from '../services/pokemonService'
 import PokemonCard from '../components/PokemonCard'
 import BattleLog from '../components/BattleLog'
+
+const MainContainer = styled.main`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: ${({ theme }) => theme.spacing[4]};
+`
+
+const WinnerBanner = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing[8]};
+  padding: ${({ theme }) => theme.spacing[4]};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  background: linear-gradient(
+    to right,
+    ${({ theme }) => theme.colors.indigo[500]},
+    ${({ theme }) => theme.colors.purple[500]}
+  );
+  color: ${({ theme }) => theme.colors.background.white};
+  text-align: center;
+`
+
+const WinnerTitle = styled.h2`
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: ${({ theme }) => theme.spacing[4]};
+`
+
+const PlayAgainButton = styled.button`
+  background: ${({ theme }) => theme.colors.background.white};
+  color: ${({ theme }) => theme.colors.purple[600]};
+  padding: ${({ theme }) => `${theme.spacing[2]} ${theme.spacing[6]}`};
+  border-radius: ${({ theme }) => theme.borderRadius.full};
+  font-weight: 600;
+  transition: ${({ theme }) => theme.transitions.default};
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.purple[50]};
+  }
+`
+
+const TurnIndicator = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing[8]};
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.gray[700]};
+`
+
+const PokemonGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: ${({ theme }) => theme.spacing[8]};
+  
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+`
 
 export default function Home() {
   const [player1Pokemon, setPlayer1Pokemon] = useState<Pokemon | null>(null)
@@ -54,29 +111,23 @@ export default function Home() {
   if (!player1Pokemon || !player2Pokemon) return <div>Loading...</div>
 
   return (
-    <main className="container mx-auto p-4">
-      {/* Battle Status Banner */}
+    <MainContainer>
       {winner && (
-        <div className="mb-8 p-4 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-center">
-          <h2 className="text-2xl font-bold mb-4">{winner} Wins!</h2>
-          <button
-            onClick={initGame}
-            className="bg-white text-purple-600 px-6 py-2 rounded-full font-semibold hover:bg-purple-50 transition-colors"
-          >
+        <WinnerBanner>
+          <WinnerTitle>{winner} Wins!</WinnerTitle>
+          <PlayAgainButton onClick={initGame}>
             Play Again
-          </button>
-        </div>
+          </PlayAgainButton>
+        </WinnerBanner>
       )}
 
-      {/* Current Turn Indicator */}
       {!winner && (
-        <div className="mb-8 text-center text-xl font-semibold text-gray-700">
+        <TurnIndicator>
           Current Turn: {isPlayer1Turn ? 'Player 1' : 'Player 2'}
-        </div>
+        </TurnIndicator>
       )}
 
-      {/* Pokemon Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <PokemonGrid>
         <PokemonCard
           pokemon={player1Pokemon}
           hp={player1HP}
@@ -89,10 +140,9 @@ export default function Home() {
           isPlayerTurn={!isPlayer1Turn && !winner}
           onMoveSelect={handleMove}
         />
-      </div>
+      </PokemonGrid>
 
-      {/* Battle Log Component */}
       <BattleLog logs={gameLog} />
-    </main>
+    </MainContainer>
   )
 } 
