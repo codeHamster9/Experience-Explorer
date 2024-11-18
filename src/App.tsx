@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import FilterableList from './components/FilterableList'
 import Layout from './components/Layout'
 import ErrorBoundary from './components/ErrorBoundary'
+import PokemonPage from './pages/pokemonPage'
 
 const VITE_CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
@@ -30,6 +31,14 @@ function App() {
                       </div>
                     </SignedOut>
                   </>
+                }
+              />
+              <Route
+                path="/pokemon-battle"
+                element={
+                  <SignedIn>
+                    <PokemonPage />
+                  </SignedIn>
                 }
               />
             </Route>
