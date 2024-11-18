@@ -1,14 +1,38 @@
-import axios from 'axios'
+import { useQuery } from '@tanstack/react-query'
 import { Pokemon, Move } from '../types/pokemon'
 
 const API_BASE = 'https://pokeapi.co/api/v2'
 
-export const getPokemon = async (id: number): Promise<Pokemon> => {
-  const response = await axios.get(`${API_BASE}/pokemon/${id}`)
-  return response.data
+// Query keys for caching
+export const pokemonKeys = {
+  all: ['pokemon'] as const,
+  detail: (id: number) => [...pokemonKeys.all, id] as const,
+  move: (url: string) => [...pokemonKeys.all, 'move', url] as const,
 }
 
-export const getMove = async (url: string): Promise<Move> => {
-  const response = await axios.get(url)
-  return response.data
+// Custom hooks for fetching data
+export const usePokemon = (id: number) => {
+  return useQuery({
+    queryKey: pokemonKeys.detail(id),
+    queryFn: async (): Promise<Pokemon> => {
+      const response = await fetch(`${API_BASE}/pokemon/${id}`)
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+      return response.json()
+    }
+  })
+}
+
+export const useMove = (url: string) => {
+  return useQuery({
+    queryKey: pokemonKeys.move(url),
+    queryFn: async (): Promise<Move> => {
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+      return response.json()
+    }
+  })
 } 
