@@ -35,4 +35,24 @@ describe('ItemCard', () => {
     const container = screen.getByRole('img').closest('.group')
     expect(container).toHaveClass('hover:shadow-md')
   })
+
+  it('highlights search query in title and description', () => {
+    const mockItem = {
+      id: 1,
+      title: 'Mountain Trek',
+      category: 'Adventure',
+      description: 'A mountain hiking experience',
+      imageUrl: 'https://example.com/image.jpg',
+    }
+    
+    render(<ItemCard item={mockItem} searchQuery="mountain" />)
+    
+    const highlightedElements = screen.getAllByText(/mountain/i, { 
+      selector: 'mark' 
+    })
+    expect(highlightedElements).toHaveLength(2)
+    highlightedElements.forEach(element => {
+      expect(element).toHaveClass('bg-yellow-200')
+    })
+  })
 })

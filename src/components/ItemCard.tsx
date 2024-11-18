@@ -1,28 +1,36 @@
 import React from 'react'
 import { Item } from '../types'
+import { highlightText } from '../utils/highlightText'
 
 interface ItemCardProps {
   item: Item;
+  searchQuery?: string;
 }
 
-export default function ItemCard({ item }: ItemCardProps) {
+export default function ItemCard({ item, searchQuery = '' }: ItemCardProps) {
   return (
-    <div className="group bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
-      <div className="aspect-video overflow-hidden">
-        <img
-          src={item.imageUrl}
-          alt={item.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-      </div>
+    <div className="group rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
+      <img
+        src={item.imageUrl}
+        alt={item.title}
+        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+      />
       <div className="p-4">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-xl font-semibold text-gray-800">{item.title}</h3>
-          <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-medium">
-            {item.category}
-          </span>
-        </div>
-        <p className="text-gray-600">{item.description}</p>
+        <h3 
+          className="text-lg font-semibold mb-1"
+          dangerouslySetInnerHTML={{ 
+            __html: highlightText(item.title, searchQuery) 
+          }}
+        />
+        <span className="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mb-2">
+          {item.category}
+        </span>
+        <p 
+          className="text-gray-600"
+          dangerouslySetInnerHTML={{ 
+            __html: highlightText(item.description, searchQuery) 
+          }}
+        />
       </div>
     </div>
   )
