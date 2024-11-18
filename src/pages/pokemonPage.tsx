@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { Pokemon } from '../types/pokemon'
 import { getPokemon } from '../services/pokemonService'
 import PokemonCard from '../components/PokemonCard'
+import BattleLog from '../components/BattleLog'
 
 export default function Home() {
   const [player1Pokemon, setPlayer1Pokemon] = useState<Pokemon | null>(null)
@@ -11,17 +12,6 @@ export default function Home() {
   const [isPlayer1Turn, setIsPlayer1Turn] = useState(true)
   const [gameLog, setGameLog] = useState<string[]>([])
   const [winner, setWinner] = useState<string | null>(null)
-
-    
-  // Add ref for the log container
-  const logContainerRef = useRef<HTMLDivElement>(null)
-
-  // Add useEffect to handle auto-scrolling whenever gameLog updates
-  useEffect(() => {
-    if (logContainerRef.current) {
-      logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight
-    }
-  }, [gameLog])
 
   const initGame = async () => {
     const p1 = await getPokemon(Math.floor(Math.random() * 151) + 1)
@@ -101,23 +91,8 @@ export default function Home() {
         />
       </div>
 
-      {/* Battle Log */}
-      <div 
-        ref={logContainerRef}
-        className="mt-8 border p-4 rounded-lg bg-white shadow-inner h-48 overflow-y-auto scroll-smooth"
-      >
-        <h3 className="font-semibold mb-2 text-gray-700">Battle Log</h3>
-        {gameLog.map((log, i) => (
-          <p 
-            key={i} 
-            className={`py-1 ${
-              log.includes('wins') ? 'text-green-600 font-semibold' : 'text-gray-600'
-            }`}
-          >
-            {log}
-          </p>
-        ))}
-      </div>
+      {/* Battle Log Component */}
+      <BattleLog logs={gameLog} />
     </main>
   )
 } 
