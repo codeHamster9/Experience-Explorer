@@ -1,12 +1,15 @@
 import React, { useState, useMemo } from 'react'
 import { items } from '../data/items'
-import SearchBar from './SearchBar'
-import CategoryFilter from './CategoryFilter'
-import ItemCard from './ItemCard'
+import SearchBar from '../components/SearchBar'
+import CategoryFilter from '../components/CategoryFilter'
+import ItemCard from '../components/ItemCard'
+import { useRenderCount } from '@uidotdev/usehooks'
 
-export default function FilterableList() {
+export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
+  const renderCount = useRenderCount()
+  console.info('renderCount home:', renderCount)
 
   const categories = useMemo(
     () => Array.from(new Set(items.map((item) => item.category))),

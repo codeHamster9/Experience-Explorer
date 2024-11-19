@@ -1,6 +1,6 @@
 import { ClerkProvider, SignIn, SignedIn, SignedOut } from '@clerk/clerk-react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import FilterableList from './components/FilterableList'
+import HomePage from './pages/HomePage'
 import Layout from './components/Layout'
 import ErrorBoundary from './components/ErrorBoundary'
 import PokemonPage from './pages/pokemonPage'
@@ -34,7 +34,7 @@ function App() {
                   element={
                     <>
                       <SignedIn>
-                        <FilterableList />
+                        <HomePage />
                       </SignedIn>
                       <SignedOut>
                         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50">

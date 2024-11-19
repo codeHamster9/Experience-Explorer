@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react'
 import { usePokemon } from '../services/pokemonService'
 import PokemonCard from '../components/PokemonCard'
 import BattleLog from '../components/BattleLog'
+import { useRenderCount } from '@uidotdev/usehooks'
 
-export default function Home() {
+export default function PokemonPage() {
   const [pokemonIds, setPokemonIds] = useState({
     player1: Math.floor(Math.random() * 151) + 1,
     player2: Math.floor(Math.random() * 151) + 1
@@ -13,11 +14,12 @@ export default function Home() {
   const [isPlayer1Turn, setIsPlayer1Turn] = useState(true)
   const [gameLog, setGameLog] = useState<string[]>([])
   const [winner, setWinner] = useState<string | null>(null)
+  const renderCount = useRenderCount()
 
   // Fetch Pokemon data using React Query
   const { data: player1Pokemon, isLoading: isLoading1 } = usePokemon(pokemonIds.player1)
   const { data: player2Pokemon, isLoading: isLoading2 } = usePokemon(pokemonIds.player2)
-
+  console.log('renderCount', renderCount)
   // Set initial HP when Pokemon data is loaded
   useEffect(() => {
     if (player1Pokemon && player2Pokemon && player1HP === 0 && player2HP === 0) {
