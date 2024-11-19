@@ -1,68 +1,44 @@
-import { useState, useEffect } from 'react'
+import { useAtom, useAtomValue } from 'jotai'
 import { usePokemon } from '../services/pokemonService'
 import PokemonCard from '../components/PokemonCard'
 import BattleLog from '../components/BattleLog'
-import { useRenderCount } from '@uidotdev/usehooks'
+import {
+  pokemonIdsAtom,
+  player1HPAtom,
+  player2HPAtom,
+  isPlayer1TurnAtom,
+  gameLogAtom,
+  winnerAtom,
+  handleMoveAtom,
+  initGameAtom,
+  currentTurnAtom
+} from '../store/battleAtoms'
+import { useEffect } from 'react'
 
 export default function PokemonPage() {
-  const [pokemonIds, setPokemonIds] = useState({
-    player1: Math.floor(Math.random() * 151) + 1,
-    player2: Math.floor(Math.random() * 151) + 1
-  })
-  const [player1HP, setPlayer1HP] = useState(0)
-  const [player2HP, setPlayer2HP] = useState(0)
-  const [isPlayer1Turn, setIsPlayer1Turn] = useState(true)
-  const [gameLog, setGameLog] = useState<string[]>([])
-  const [winner, setWinner] = useState<string | null>(null)
-  const renderCount = useRenderCount()
+  // Read-only atoms
+  const pokemonIds = useAtomValue(pokemonIdsAtom)
+  const player1HP = useAtomValue(player1HPAtom)
+  const player2HP = useAtomValue(player2HPAtom)
+  const isPlayer1Turn = useAtomValue(isPlayer1TurnAtom)
+  const gameLog = useAtomValue(gameLogAtom)
+  const winner = useAtomValue(winnerAtom)
+  const currentTurn = useAtomValue(currentTurnAtom)
+
+  // Action atoms
+  const [, initGame] = useAtom(initGameAtom)
+  const [, handleMove] = useAtom(handleMoveAtom)
 
   // Fetch Pokemon data using React Query
   const { data: player1Pokemon, isLoading: isLoading1 } = usePokemon(pokemonIds.player1)
   const { data: player2Pokemon, isLoading: isLoading2 } = usePokemon(pokemonIds.player2)
-  console.log('renderCount', renderCount)
+
   // Set initial HP when Pokemon data is loaded
   useEffect(() => {
     if (player1Pokemon && player2Pokemon && player1HP === 0 && player2HP === 0) {
-      setPlayer1HP(player1Pokemon.stats[0].base_stat)
-      setPlayer2HP(player2Pokemon.stats[0].base_stat)
+      initGame({ player1HP, player2HP })
     }
-  }, [player1Pokemon, player2Pokemon, player1HP, player2HP])
-
-  const initGame = () => {
-    const newPlayer1Id = Math.floor(Math.random() * 151) + 1
-    const newPlayer2Id = Math.floor(Math.random() * 151) + 1
-    
-    setPokemonIds({
-      player1: newPlayer1Id,
-      player2: newPlayer2Id
-    })
-    setPlayer1HP(0) // Will be set when new Pokemon data loads
-    setPlayer2HP(0)
-    setIsPlayer1Turn(true)
-    setGameLog([])
-    setWinner(null)
-  }
-
-  const handleMove = (moveName: string) => {
-    if (winner) return // Prevent moves after game is over
-
-    const damage = Math.floor(Math.random() * 50) + 10
-    const currentPlayer = isPlayer1Turn ? 'Player 1' : 'Player 2'
-    const targetHP = isPlayer1Turn ? setPlayer2HP : setPlayer1HP
-    const currentHP = isPlayer1Turn ? player2HP : player1HP
-
-    const newHP = Math.max(0, currentHP - damage)
-    targetHP(newHP)
-    setGameLog(prev => [...prev, `${currentPlayer} used ${moveName} for ${damage} damage!`])
-
-    // Check for winner
-    if (newHP <= 0) {
-      setWinner(currentPlayer)
-      setGameLog(prev => [...prev, `${currentPlayer} wins the battle!`])
-    } else {
-      setIsPlayer1Turn(!isPlayer1Turn)
-    }
-  }
+  }, [player1Pokemon, player2Pokemon, player1HP, player2HP, initGame])
 
   if (isLoading1 || isLoading2 || !player1Pokemon || !player2Pokemon) {
     return <div className="container mx-auto p-4 text-center">Loading...</div>
@@ -70,12 +46,11 @@ export default function PokemonPage() {
 
   return (
     <main className="container mx-auto p-4">
-      {/* Battle Status Banner */}
       {winner && (
         <div className="mb-8 p-4 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-center">
           <h2 className="text-2xl font-bold mb-4">{winner} Wins!</h2>
           <button
-            onClick={initGame}
+            onClick={() => initGame({ player1HP, player2HP })}
             className="bg-white text-purple-600 px-6 py-2 rounded-full font-semibold hover:bg-purple-50 transition-colors"
           >
             Play Again
@@ -83,14 +58,12 @@ export default function PokemonPage() {
         </div>
       )}
 
-      {/* Current Turn Indicator */}
       {!winner && (
         <div className="mb-8 text-center text-xl font-semibold text-gray-700">
-          Current Turn: {isPlayer1Turn ? 'Player 1' : 'Player 2'}
+          Current Turn: {currentTurn}
         </div>
       )}
 
-      {/* Pokemon Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <PokemonCard
           pokemon={player1Pokemon}
@@ -106,7 +79,6 @@ export default function PokemonPage() {
         />
       </div>
 
-      {/* Battle Log Component */}
       <BattleLog logs={gameLog} />
     </main>
   )
