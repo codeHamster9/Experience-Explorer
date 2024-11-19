@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { usePokemon } from '../services/pokemonService'
 import PokemonCard from '../components/PokemonCard'
 import BattleLog from '../components/BattleLog'
@@ -19,10 +19,12 @@ export default function Home() {
   const { data: player2Pokemon, isLoading: isLoading2 } = usePokemon(pokemonIds.player2)
 
   // Set initial HP when Pokemon data is loaded
-  if (player1Pokemon && player2Pokemon && player1HP === 0 && player2HP === 0) {
-    setPlayer1HP(player1Pokemon.stats[0].base_stat)
-    setPlayer2HP(player2Pokemon.stats[0].base_stat)
-  }
+  useEffect(() => {
+    if (player1Pokemon && player2Pokemon && player1HP === 0 && player2HP === 0) {
+      setPlayer1HP(player1Pokemon.stats[0].base_stat)
+      setPlayer2HP(player2Pokemon.stats[0].base_stat)
+    }
+  }, [player1Pokemon, player2Pokemon, player1HP, player2HP])
 
   const initGame = () => {
     const newPlayer1Id = Math.floor(Math.random() * 151) + 1

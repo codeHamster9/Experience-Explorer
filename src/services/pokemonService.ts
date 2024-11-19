@@ -12,6 +12,7 @@ export const pokemonKeys = {
 
 // Custom hooks for fetching data
 export const usePokemon = (id: number) => {
+  console.log('usePokemon', id)
   return useQuery({
     queryKey: pokemonKeys.detail(id),
     queryFn: async (): Promise<Pokemon> => {
