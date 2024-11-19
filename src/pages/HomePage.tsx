@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useCallback } from 'react'
 import { items } from '../data/items'
 import SearchBar from '../components/SearchBar'
 import CategoryFilter from '../components/CategoryFilter'
-import ItemCard from '../components/ItemCard'
+import ItemGrid from '../components/ItemGrid'
 import { useRenderCount } from '@uidotdev/usehooks'
 
 export default function HomePage() {
@@ -27,6 +27,14 @@ export default function HomePage() {
     })
   }, [searchQuery, selectedCategory])
 
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchQuery(value)
+  }, [])
+
+  const handleCategoryChange = useCallback((value: string) => {
+    setSelectedCategory(value)
+  }, [])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-6 md:p-8">
       <div className=" mx-auto">
@@ -36,30 +44,19 @@ export default function HomePage() {
           </h1>
 
           <div className="flex flex-col md:flex-row gap-4 mb-8">
-        <SearchBar value={searchQuery} onChange={setSearchQuery} />
-        <CategoryFilter
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onChange={setSelectedCategory}
-        />
-             </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredItems.length ? (
-          filteredItems.map((item) => (
-            <ItemCard 
-              key={item.id} 
-              item={item} 
-              searchQuery={searchQuery} 
+            <SearchBar value={searchQuery} onChange={handleSearchChange} />
+            <CategoryFilter
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onChange={handleCategoryChange}
             />
-          )) 
-        ) : (
-          <p className="col-span-full text-center text-gray-500">
-            No items found matching your criteria
-          </p>
-        )}
+          </div>
+          <ItemGrid 
+            filteredItems={filteredItems} 
+            searchQuery={searchQuery} 
+          />
         </div>
       </div>
-    </div>
     </div>
   )
 }
