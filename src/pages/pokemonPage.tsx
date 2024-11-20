@@ -29,15 +29,15 @@ export default function PokemonPage() {
   const [, updatePokemon] = useAtom(updatePokemonAtom)
 
   // Fetch Pokemon data using React Query
-  const { data: player1Pokemon, isLoading: isLoading1 } = usePokemon(player1.id)
-  const { data: player2Pokemon, isLoading: isLoading2 } = usePokemon(player2.id)
+  const { data: pokemon1Data, isLoading: isLoading1 } = usePokemon(player1.id)
+  const { data: pokemon2Data, isLoading: isLoading2 } = usePokemon(player2.id)
 
   // Update Pokemon data when loaded
-  if (player1Pokemon && !player1.pokemon) {
-    updatePokemon({ player: 'player1', pokemon: player1Pokemon })
+  if (pokemon1Data && !player1.pokemon) {
+    updatePokemon({ player: 'player1', pokemon: pokemon1Data })
   }
-  if (player2Pokemon && !player2.pokemon) {
-    updatePokemon({ player: 'player2', pokemon: player2Pokemon })
+  if (pokemon2Data && !player2.pokemon) {
+    updatePokemon({ player: 'player2', pokemon: pokemon2Data })
   }
 
   if (isLoading1 || isLoading2 || !player1.pokemon || !player2.pokemon) {
