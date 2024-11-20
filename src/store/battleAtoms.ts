@@ -1,19 +1,26 @@
 import { atom } from 'jotai'
+import { Pokemon } from '../types/pokemon'
 
-
-interface PokemonIds {
-  player1: number;
-  player2: number;
+interface PokemonPlayer {
+  pokemon: Pokemon | null;
+  hp: number;
+  id: number;
 }
 
-// Atoms for game state
-export const pokemonIdsAtom = atom<PokemonIds>({
-  player1: Math.floor(Math.random() * 151) + 1,
-  player2: Math.floor(Math.random() * 151) + 1,
+// Helper function to get random Pokemon ID
+const getRandomPokemonId = () => Math.floor(Math.random() * 151) + 1
+
+// Initial state factory to ensure fresh state
+const createInitialPlayer = () => ({
+  pokemon: null,
+  hp: 0,
+  id: getRandomPokemonId(),
 })
 
-export const player1HPAtom = atom<number>(0)
-export const player2HPAtom = atom<number>(0)
+// Atoms for game state
+export const player1Atom = atom<PokemonPlayer>(createInitialPlayer())
+export const player2Atom = atom<PokemonPlayer>(createInitialPlayer())
+
 export const isPlayer1TurnAtom = atom<boolean>(true)
 export const gameLogAtom = atom<string[]>([])
 export const winnerAtom = atom<string | null>(null)
@@ -26,16 +33,12 @@ export const currentTurnAtom = atom(
 // Action atoms
 export const initGameAtom = atom(
   null,
-  (get, set, { player1HP, player2HP }: { player1HP: number; player2HP: number }) => {
-    const newPlayer1Id = Math.floor(Math.random() * 151) + 1
-    const newPlayer2Id = Math.floor(Math.random() * 151) + 1
+  (get, set) => {
+    // Reset both players with new IDs
+    set(player1Atom, createInitialPlayer())
+    set(player2Atom, createInitialPlayer())
     
-    set(pokemonIdsAtom, {
-      player1: newPlayer1Id,
-      player2: newPlayer2Id
-    })
-    set(player1HPAtom, player1HP)
-    set(player2HPAtom, player2HP)
+    // Reset game state
     set(isPlayer1TurnAtom, true)
     set(gameLogAtom, [])
     set(winnerAtom, null)
@@ -51,15 +54,16 @@ export const handleMoveAtom = atom(
     const damage = Math.floor(Math.random() * 50) + 10
     const isPlayer1Turn = get(isPlayer1TurnAtom)
     const currentPlayer = isPlayer1Turn ? 'Player 1' : 'Player 2'
-    const currentHP = isPlayer1Turn ? get(player2HPAtom) : get(player1HPAtom)
-
-    const newHP = Math.max(0, currentHP - damage)
     
-    if (isPlayer1Turn) {
-      set(player2HPAtom, newHP)
-    } else {
-      set(player1HPAtom, newHP)
-    }
+    const targetAtom = isPlayer1Turn ? player2Atom : player1Atom
+    const targetPlayer = get(targetAtom)
+
+    const newHP = Math.max(0, targetPlayer.hp - damage)
+    
+    set(targetAtom, {
+      ...targetPlayer,
+      hp: newHP,
+    })
 
     set(gameLogAtom, (prev) => [...prev, `${currentPlayer} used ${moveName} for ${damage} damage!`])
 
@@ -68,6 +72,23 @@ export const handleMoveAtom = atom(
       set(gameLogAtom, (prev) => [...prev, `${currentPlayer} wins the battle!`])
     } else {
       set(isPlayer1TurnAtom, !isPlayer1Turn)
+    }
+  }
+)
+
+// Action to update Pokemon data when loaded
+export const updatePokemonAtom = atom(
+  null,
+  (get, set, { player, pokemon }: { player: 'player1' | 'player2', pokemon: Pokemon }) => {
+    const playerAtom = player === 'player1' ? player1Atom : player2Atom
+    const currentPlayer = get(playerAtom)
+    
+    if (currentPlayer.hp === 0) {
+      set(playerAtom, {
+        ...currentPlayer,
+        pokemon,
+        hp: pokemon.stats[0].base_stat
+      })
     }
   }
 ) 

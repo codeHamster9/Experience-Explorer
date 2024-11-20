@@ -1,17 +1,26 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Filter } from 'lucide-react'
+import { Item } from '../types'
+import { useAtom } from 'jotai'
+import { selectedCategoryAtom } from '../store/searchAtoms'
 
 interface CategoryFilterProps {
-  categories: string[]
-  selectedCategory: string
-  onChange: (category: string) => void
+  items: Item[]
 }
 
 export default function CategoryFilter({
-  categories,
-  selectedCategory,
-  onChange,
+  items
 }: CategoryFilterProps) {
+  const [selectedCategory, setSelectedCategory] = useAtom(selectedCategoryAtom)
+
+  const categories = useMemo(
+    () => { 
+      console.log('categories')
+      return Array.from(new Set(items.map((item) => item.category))) 
+    },
+    [items]
+  )
+
   return (
     <div className="relative">
       <Filter
@@ -20,7 +29,7 @@ export default function CategoryFilter({
       />
       <select
         value={selectedCategory}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => setSelectedCategory(e.target.value)}
         className="pl-10 pr-8 py-2 border border-gray-200 rounded-lg appearance-none bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all cursor-pointer">
         <option value="">All Categories</option>
         {categories.map((category) => (
