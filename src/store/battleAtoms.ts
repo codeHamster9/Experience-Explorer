@@ -83,12 +83,12 @@ export const updatePokemonAtom = atom(
     const playerAtom = player === 'player1' ? player1Atom : player2Atom
     const currentPlayer = get(playerAtom)
     
-    if (currentPlayer.hp === 0) {
+  
       set(playerAtom, {
         ...currentPlayer,
         pokemon,
         hp: pokemon.stats[0].base_stat
       })
-    }
+    
   }
 ) 
