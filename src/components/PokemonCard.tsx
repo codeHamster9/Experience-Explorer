@@ -1,23 +1,25 @@
 
-import { isPlayer1TurnAtom, pokemonById } from '../store/battleAtoms'
+import { currentTurnAtom, pokemonById, winnerAtom } from '../store/battleAtoms'
 
 import { useAtom, useAtomValue } from 'jotai'
 
 interface Props {
   pokemonId: number;
+  playerId: string;
   onMoveSelect: (moveName: string) => void;
 }
 
-export default function PokemonCard({ pokemonId, onMoveSelect }: Props) {
+export default function PokemonCard({ pokemonId, playerId, onMoveSelect }: Props) {
   const [getPokemon] = useAtom(pokemonById)
-  const isPlayerTurn = useAtomValue(isPlayer1TurnAtom)
-  
+  const winner = useAtomValue(winnerAtom)
+  const currentPlayer = useAtomValue(currentTurnAtom)
   const { pokemon, hp} = getPokemon(pokemonId)
   if (!pokemon) return null
-
-  
+  const notMyTurn = currentPlayer !== playerId
   return (
-    <div className="border rounded-lg bg-white shadow-md p-4">
+    <div className={`border rounded-lg bg-white shadow-md p-4 ${
+      winner === playerId ? 'animate-pulse' : ''
+    }`}>
       <img 
         src={pokemon.sprites.front_default} 
         alt={pokemon. name} 
@@ -46,7 +48,12 @@ export default function PokemonCard({ pokemonId, onMoveSelect }: Props) {
             <button
               key={move.move.name}
               onClick={() => onMoveSelect(move.move.name)}
-              className="bg-blue-500 text-white px-2 py-1 rounded capitalize hover:bg-blue-600 transition-colors"
+                disabled={notMyTurn}
+              className={`px-2 py-1 rounded capitalize transition-colors ${
+                notMyTurn || winner
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-blue-500 hover:bg-blue-600'
+              } text-white`}
             >
               {move.move.name}
             </button>

@@ -9,7 +9,11 @@ interface PokemonPlayer {
 }
 
 // Helper function to get random Pokemon ID
+//TODO: prevent duplicates
 export const getRandomPokemonId = () => Math.floor(Math.random() * 151) + 1
+
+export const player1IdAtom = atom<number>(getRandomPokemonId())
+export const player2IdAtom = atom<number>(getRandomPokemonId())
 export const pokemonsAtom = atomWithReset<{ [id: number]: PokemonPlayer }>({})
 export const isPlayer1TurnAtom = atom<boolean>(true)
 export const gameLogAtom = atom<string[]>([])
@@ -26,6 +30,8 @@ export const initGameAtom = atom(
   (get, set) => {
     // Reset both players with new IDs
     set(pokemonsAtom, {})
+    set(player1IdAtom, getRandomPokemonId())
+    set(player2IdAtom, getRandomPokemonId())
     // Reset game state
     set(isPlayer1TurnAtom, true)
     set(gameLogAtom, [])
@@ -42,12 +48,10 @@ export const handleMoveAtom = atom(
 
     const damage = Math.floor(Math.random() * 50) + 10
     const isPlayer1Turn = get(isPlayer1TurnAtom)
-    const currentPlayer = isPlayer1Turn ? 'Player 1' : 'Player 2'
-      
-       
-    const pokemonPlayer = get(pokemonById)(pokemonId)  
-    const newHP = Math.max(0, pokemonPlayer.hp - damage)
-    set(updatePokemonAtom, { pokemon: pokemonPlayer.pokemon!, hp: newHP })
+    const currentPlayer = get(currentTurnAtom)    
+    const { pokemon, hp } = get(pokemonById)(pokemonId)  
+    const newHP = Math.max(0, hp - damage)
+    set(updatePokemonAtom, { pokemon:pokemon!, hp: newHP })
     set(gameLogAtom, (prev) => [...prev, `${currentPlayer} used ${moveName} for ${damage} damage!`])
 
     if (newHP <= 0) {
@@ -65,7 +69,7 @@ export const pokemonById = atom((get) => (id: number) => get(pokemonsAtom)[id])
 export const updatePokemonAtom = atom(
   null,
   (get, set, { pokemon, hp }: { pokemon: Pokemon, hp?: number }) => {
-    console.log('pokemonUpdated')
+    console.log('pokemonUpdated',pokemon.name)
         set(pokemonsAtom, {
         ...get(pokemonsAtom),
         [pokemon.id]: {

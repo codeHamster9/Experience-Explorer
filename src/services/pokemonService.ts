@@ -21,7 +21,7 @@ export const usePokemon = (id: number) => {
         throw new Error('Network response was not ok')
       }
       return response.json()
-    }
+    },
   })
 }
 
