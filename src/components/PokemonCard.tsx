@@ -1,18 +1,26 @@
-import { Pokemon } from '../types/pokemon'
+
+import { isPlayer1TurnAtom, pokemonById } from '../store/battleAtoms'
+
+import { useAtom, useAtomValue } from 'jotai'
 
 interface Props {
-  pokemon: Pokemon;
-  hp: number;
-  isPlayerTurn: boolean;
+  pokemonId: number;
   onMoveSelect: (moveName: string) => void;
 }
 
-export default function PokemonCard({ pokemon, hp, isPlayerTurn, onMoveSelect }: Props) {
+export default function PokemonCard({ pokemonId, onMoveSelect }: Props) {
+  const [getPokemon] = useAtom(pokemonById)
+  const isPlayerTurn = useAtomValue(isPlayer1TurnAtom)
+  
+  const { pokemon, hp} = getPokemon(pokemonId)
+  if (!pokemon) return null
+
+  
   return (
     <div className="border rounded-lg bg-white shadow-md p-4">
       <img 
         src={pokemon.sprites.front_default} 
-        alt={pokemon.name} 
+        alt={pokemon. name} 
         className="w-32 h-32 mx-auto"
       />
       <h2 className="text-xl capitalize text-center font-semibold text-gray-800">
@@ -29,10 +37,10 @@ export default function PokemonCard({ pokemon, hp, isPlayerTurn, onMoveSelect }:
           />
         </div>
         <p className="text-center mt-1">
-          HP: {hp}/{pokemon.stats[0].base_stat}
+          HP: {hp}/{ pokemon.stats[0].base_stat}
         </p>
       </div>
-      {isPlayerTurn && (
+      { (
         <div className="mt-4 grid grid-cols-2 gap-2">
           {pokemon.moves.slice(0, 4).map((move) => (
             <button

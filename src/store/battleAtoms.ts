@@ -1,5 +1,6 @@
 import { atom } from 'jotai'
 import { Pokemon } from '../types/pokemon'
+import { atomWithReset } from 'jotai/utils'
 
 interface PokemonPlayer {
   pokemon: Pokemon | null;
@@ -8,19 +9,8 @@ interface PokemonPlayer {
 }
 
 // Helper function to get random Pokemon ID
-const getRandomPokemonId = () => Math.floor(Math.random() * 151) + 1
-
-// Initial state factory to ensure fresh state
-const createInitialPlayer = () => ({
-  pokemon: null,
-  hp: 0,
-  id: getRandomPokemonId(),
-})
-
-// Atoms for game state
-export const player1Atom = atom<PokemonPlayer>(createInitialPlayer())
-export const player2Atom = atom<PokemonPlayer>(createInitialPlayer())
-
+export const getRandomPokemonId = () => Math.floor(Math.random() * 151) + 1
+export const pokemonsAtom = atomWithReset<{ [id: number]: PokemonPlayer }>({})
 export const isPlayer1TurnAtom = atom<boolean>(true)
 export const gameLogAtom = atom<string[]>([])
 export const winnerAtom = atom<string | null>(null)
@@ -35,9 +25,7 @@ export const initGameAtom = atom(
   null,
   (get, set) => {
     // Reset both players with new IDs
-    set(player1Atom, createInitialPlayer())
-    set(player2Atom, createInitialPlayer())
-    
+    set(pokemonsAtom, {})
     // Reset game state
     set(isPlayer1TurnAtom, true)
     set(gameLogAtom, [])
@@ -47,24 +35,19 @@ export const initGameAtom = atom(
 
 export const handleMoveAtom = atom(
   null,
-  (get, set, moveName: string) => {
+  (get, set, moveName: string, pokemonId: number) => {
+       
     const winner = get(winnerAtom)
     if (winner) return
 
     const damage = Math.floor(Math.random() * 50) + 10
     const isPlayer1Turn = get(isPlayer1TurnAtom)
     const currentPlayer = isPlayer1Turn ? 'Player 1' : 'Player 2'
-    
-    const targetAtom = isPlayer1Turn ? player2Atom : player1Atom
-    const targetPlayer = get(targetAtom)
-
-    const newHP = Math.max(0, targetPlayer.hp - damage)
-    
-    set(targetAtom, {
-      ...targetPlayer,
-      hp: newHP,
-    })
-
+      
+       
+    const pokemonPlayer = get(pokemonById)(pokemonId)  
+    const newHP = Math.max(0, pokemonPlayer.hp - damage)
+    set(updatePokemonAtom, { pokemon: pokemonPlayer.pokemon!, hp: newHP })
     set(gameLogAtom, (prev) => [...prev, `${currentPlayer} used ${moveName} for ${damage} damage!`])
 
     if (newHP <= 0) {
@@ -76,18 +59,20 @@ export const handleMoveAtom = atom(
   }
 )
 
+export const pokemonById = atom((get) => (id: number) => get(pokemonsAtom)[id])
+
 // Action to update Pokemon data when loaded
 export const updatePokemonAtom = atom(
   null,
-  (get, set, { player, pokemon }: { player: 'player1' | 'player2', pokemon: Pokemon }) => {
-    const playerAtom = player === 'player1' ? player1Atom : player2Atom
-    const currentPlayer = get(playerAtom)
-    
-  
-      set(playerAtom, {
-        ...currentPlayer,
-        pokemon,
-        hp: pokemon.stats[0].base_stat
+  (get, set, { pokemon, hp }: { pokemon: Pokemon, hp?: number }) => {
+    console.log('pokemonUpdated')
+        set(pokemonsAtom, {
+        ...get(pokemonsAtom),
+        [pokemon.id]: {
+          pokemon,
+          hp: hp || pokemon.stats[0].base_stat,
+          id: pokemon.id
+        }
       })
     
   }
