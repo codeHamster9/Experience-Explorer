@@ -66,7 +66,7 @@ export const handleMoveAtom = atom(
 export const pokemonById = atom((get) => (id: number) => get(pokemonsAtom)[id])
 
 // Action to update Pokemon data when loaded
-export const updatePokemonAtom = atom(
+export const  updatePokemonAtom = atom(
   null,
   (get, set, { pokemon, hp }: { pokemon: Pokemon, hp?: number }) => {
     console.log('pokemonUpdated',pokemon.name)
@@ -81,3 +81,4 @@ export const updatePokemonAtom = atom(
     
   }
 ) 
+

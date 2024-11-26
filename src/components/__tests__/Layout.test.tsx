@@ -1,35 +1,35 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
-import { ClerkProvider } from '@clerk/clerk-react'
 import Layout from '../Layout'
 import { vi, describe, it, expect } from 'vitest'
+import React from 'react'
 
+// Mock the Clerk components
 vi.mock('@clerk/clerk-react', () => ({
-  ClerkProvider: ({
-    children,
-  }: {
-    children: React.ReactNode | null | undefined;
-  }) => {
-    if (!children) {
-      throw new Error('ClerkProvider: children is null or undefined')
-    }
-    return <>{children}</>
-  },
   UserButton: () => <div data-testid="user-button">User Button</div>,
+  SignedIn: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }))
 
 describe('Layout', () => {
-  it('renders header with title and user button', () => {
+  it('renders header with title and navigation', () => {
     render(
-      <ClerkProvider publishableKey="test">
-        <BrowserRouter>
-          <Layout />
-        </BrowserRouter>
-      </ClerkProvider>
+      <BrowserRouter>
+        <Layout />
+      </BrowserRouter>
     )
 
-    expect(screen.getByText('Experience Explorer')).toBeInTheDocument()
+    expect(screen.getByText('MyApp')).toBeInTheDocument()
+    expect(screen.getByText('Home')).toBeInTheDocument()
+    expect(screen.getByText('Pokemon Battle')).toBeInTheDocument()
+  })
+
+  it('renders user button', () => {
+    render(
+      <BrowserRouter>
+        <Layout />
+      </BrowserRouter>
+    )
+
     expect(screen.getByTestId('user-button')).toBeInTheDocument()
   })
 })

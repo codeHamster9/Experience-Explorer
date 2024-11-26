@@ -3,6 +3,8 @@ import { useAtom, useAtomValue } from 'jotai'
 import { usePokemon } from '../services/pokemonService'
 import PokemonCard from '../components/PokemonCard'
 import BattleLog from '../components/BattleLog'
+import React from 'react'
+
 import {
   handleMoveAtom,
   updatePokemonAtom,
