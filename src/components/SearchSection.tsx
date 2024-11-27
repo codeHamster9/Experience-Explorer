@@ -3,6 +3,7 @@ import CategoryFilter from './CategoryFilter'
 import ItemGrid from './ItemGrid'
 import { Item } from '../types'
 import { useRenderCount } from '@uidotdev/usehooks'
+import React from 'react'
 
 
 interface SearchSectionProps {

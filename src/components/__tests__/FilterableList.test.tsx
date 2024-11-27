@@ -23,13 +23,23 @@ describe('SearchSection', () => {
         <SearchSection items={items} />
       </Provider>
     )
+
+    // Get initial items
+    expect(screen.getByText('Mountain Trek')).toBeInTheDocument()
+    expect(screen.getByText('Beach Resort')).toBeInTheDocument()
     
+    // Type into search bar
     const searchInput = screen.getByPlaceholderText('Search experiences...')
     fireEvent.change(searchInput, { target: { value: 'Mountain' } })
 
-    // Wait for filtered results
-    expect(screen.getByText('Mountain Trek')).toBeInTheDocument()
+    // Verify filtered results
+    expect(screen.getByText('Mountain')).toBeInTheDocument()
     expect(screen.queryByText('Beach Resort')).not.toBeInTheDocument()
+
+    // Clear search should show all items again
+    fireEvent.change(searchInput, { target: { value: '' } })
+    expect(screen.getByText('Mountain Trek')).toBeInTheDocument() 
+    expect(screen.getByText('Beach Resort')).toBeInTheDocument()
   })
 
   it('filters items by category', () => {
