@@ -1,5 +1,5 @@
-
-import { currentTurnAtom, pokemonById, winnerAtom } from '../store/battleAtoms'
+ 
+import { currentTurnAtom, pokemonById, winnerAtom } from '../../../../store/battleAtoms'
 
 import { useAtom, useAtomValue } from 'jotai'
 

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { Provider, createStore } from 'jotai'
 import BattleLog from '../BattleLog'
-import { gameLogAtom } from '../../store/battleAtoms'
+import { gameLogAtom } from '../../../../store/battleAtoms'
 import { describe, it, expect } from 'vitest'
 
 describe('BattleLog', () => {

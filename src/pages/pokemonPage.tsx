@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useAtom, useAtomValue } from 'jotai'
-import { usePokemon } from '../services/pokemonService'
-import PokemonCard from '../components/PokemonCard'
-import BattleLog from '../components/BattleLog'
+import { usePokemon } from '../features/pokemon/services/pokemonService'
+import PokemonCard from '../features/pokemon/components/PokemonCard'
+import BattleLog from '../features/pokemon/components/BattleLog'
 import React from 'react'
 
 import {
@@ -15,6 +15,7 @@ import {
 
 
 import { PlayersBanner } from '../components/PlayersBanner'
+import { Pokemon } from '../features/pokemon/types/pokemon'
 
 export default function PokemonPage() {
   // Read-only atoms
@@ -42,10 +43,10 @@ export default function PokemonPage() {
   }
   // Update Pokemon data when loaded
   if (pokemon1Data) {
-    updatePokemon({  pokemon: pokemon1Data })
+    updatePokemon({  pokemon: pokemon1Data as Pokemon })
   }
   if (pokemon2Data) {
-    updatePokemon({ pokemon: pokemon2Data })
+    updatePokemon({ pokemon: pokemon2Data as Pokemon })
   }
   return (
     <main className="container mx-auto p-4">

@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai'
 import { useEffect, useRef } from 'react'
-import { gameLogAtom } from '../store/battleAtoms'
+import { gameLogAtom } from '../../../store/battleAtoms'
 
 export default function BattleLog() {
   const logContainerRef = useRef<HTMLDivElement>(null)
