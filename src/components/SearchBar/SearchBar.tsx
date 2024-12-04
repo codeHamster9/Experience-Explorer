@@ -1,6 +1,6 @@
 import React from 'react'
 import { Search } from 'lucide-react'
-import {searchQueryAtom} from '../store/searchAtoms'
+import {searchQueryAtom} from '../../store/searchAtoms'
 import { useAtom } from 'jotai/react'
 
 export default function SearchBar() {

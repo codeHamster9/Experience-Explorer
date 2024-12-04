@@ -1,4 +1,4 @@
-import SearchBar from './SearchBar'
+import SearchBar from './SearchBar/SearchBar'
 import CategoryFilter from './CategoryFilter'
 import ItemGrid from './ItemGrid'
 import { Item } from '../types'
