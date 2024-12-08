@@ -1,6 +1,6 @@
 import React from 'react'
 import { items } from '../data/items'
-import SearchSection from '../components/SearchSection'
+import SearchSection from '../features/experience-search/components/SearchSection'
 
 export default function HomePage() {
   return (

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Item } from '../types'
-import { highlightText } from '../utils/highlightText'
+import { highlightText } from '../../../utils/highlightText'
 
 interface ItemCardProps {
   item: Item;

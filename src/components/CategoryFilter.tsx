@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { Filter } from 'lucide-react'
-import { Item } from '../types'
+import { Item } from '../features/experience-search/types'
 import { useAtom } from 'jotai'
 import { selectedCategoryAtom } from '../store/searchAtoms'
 
@@ -14,10 +14,8 @@ export default function CategoryFilter({
   const [selectedCategory, setSelectedCategory] = useAtom(selectedCategoryAtom)
 
   const categories = useMemo(
-    () => { 
-      console.log('categories')
-      return Array.from(new Set(items.map((item) => item.category))) 
-    },
+    () => Array.from(new Set(items.map((item) => item.category))),
+    
     [items]
   )
 

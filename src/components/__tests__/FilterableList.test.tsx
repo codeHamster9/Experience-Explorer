@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import SearchSection from '../SearchSection'
+import SearchSection from '../../features/experience-search/components/SearchSection'
 import { items } from '../../data/items'
 import { Provider } from 'jotai'
 import { describe, it, expect } from 'vitest'

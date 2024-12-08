@@ -1,4 +1,3 @@
-import React from 'react'
 import { StoryObj, Meta } from '@storybook/react'
 import SearchBar from '../SearchBar'
 
@@ -13,7 +12,7 @@ const meta = {
 export default meta
 export const Primary: Story = {
     args: {
-      label: 'SearchBar',
+      placeholder: 'SearchBar',
     },
   }
 

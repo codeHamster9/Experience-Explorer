@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import ItemCard from '../ItemCard'
-import { Item } from '../../types'
+import { Item } from '../../features/experience-search/types'
 import { describe, it, expect } from 'vitest'
 import React from 'react'
 
