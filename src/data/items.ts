@@ -1,4 +1,4 @@
-import { Item } from '../types'
+import { Item } from '../features/experience-search/types'
 
 export const items: Item[] = [
   {
