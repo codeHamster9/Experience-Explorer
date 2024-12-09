@@ -1,5 +1,5 @@
-import SearchBar from '../../../components/SearchBar/SearchBar'
-import { searchQueryAtom } from '../../../store/searchAtoms'
+import SearchBar from '@/components/SearchBar/SearchBar'
+import { searchQueryAtom } from '@/store/searchAtoms'
 import { useAtom } from 'jotai/react'
 
 export function ExperienceSearchBar() {
