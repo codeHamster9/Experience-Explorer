@@ -28,7 +28,7 @@ export default function CategoryFilter({
       <select
         value={selectedCategory}
         onChange={(e) => setSelectedCategory(e.target.value)}
-        className="pl-10 pr-8 py-2 border border-gray-200 rounded-lg appearance-none bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all cursor-pointer">
+        className="pl-10 pr-8 py-2 border border-gray-200 rounded-lg appearance-none bg-white dark:bg-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all cursor-pointer">
         <option value="">All Categories</option>
         {categories.map((category) => (
           <option key={category} value={category}>
