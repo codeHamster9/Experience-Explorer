@@ -1,13 +1,31 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import ItemCard from './ItemCard'
-import { Item } from '../types' // You might need to create/import this type
+import { Item } from '../types' 
+import {searchQueryAtom, selectedCategoryAtom} from '../store/searchAtoms'
+import { useAtom } from 'jotai/react'
 
 interface ItemGridProps {
-  filteredItems: Item[]
-  searchQuery: string
+  items: Item[]
+  searchQuery?: string
 }
 
-export default function ItemGrid({ filteredItems, searchQuery }: ItemGridProps) {
+export default function ItemGrid({ items }: ItemGridProps) {
+  const [searchQuery] = useAtom(searchQueryAtom)
+  const [selectedCategory] = useAtom(selectedCategoryAtom)
+
+  const filteredItems = useMemo(() => {
+    console.log('filteredItems')
+    
+    return items.filter((item) => {
+      const matchesSearch =
+        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchQuery.toLowerCase())
+      const matchesCategory = selectedCategory ? item.category === selectedCategory : true
+      return matchesSearch && matchesCategory
+    })
+  }, [items, searchQuery, selectedCategory])
+
+  
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {filteredItems.length ? (
