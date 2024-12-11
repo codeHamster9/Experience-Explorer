@@ -1,7 +1,6 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import { BrowserRouter, Outlet } from 'react-router-dom'
-import { ClerkProvider, SignedIn } from '@clerk/clerk-react'
+import { ClerkProvider } from '@clerk/clerk-react'
 import Layout from '../Layout'
 import { vi, describe, it, expect } from 'vitest'
 

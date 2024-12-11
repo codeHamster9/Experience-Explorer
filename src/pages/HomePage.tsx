@@ -1,4 +1,3 @@
-import React from 'react'
 import { items } from '../data/items'
 import SearchSection from '../components/SearchSection'
 import { useRenderCount } from '@uidotdev/usehooks'

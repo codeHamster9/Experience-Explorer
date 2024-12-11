@@ -2,13 +2,14 @@ import SearchBar from './SearchBar'
 import CategoryFilter from './CategoryFilter'
 import ItemGrid from './ItemGrid'
 import { Item } from '../types'
-import { SearchProvider, useSearch } from '../context/SearchContext'
+import { useSearch } from '../context/SearchContext'
+import ItemCard from './ItemCard'
 
 interface SearchSectionProps {
   items: Item[]
 }
 
-function SearchContent() {
+export default function SearchSection({ items }: SearchSectionProps) {
   const {
     searchQuery,
     selectedCategory,
@@ -16,7 +17,7 @@ function SearchContent() {
     filteredItems,
     setSearchQuery,
     setSelectedCategory,
-  } = useSearch()
+  } = useSearch(items)
 
   return (
     <>
@@ -28,15 +29,10 @@ function SearchContent() {
           onChange={setSelectedCategory}
         />
       </div>
-      <ItemGrid filteredItems={filteredItems} searchQuery={searchQuery} />
+      <ItemGrid
+        items={filteredItems}
+        renderItem={(item: Item) => <ItemCard item={item} searchQuery={searchQuery} />}
+      />
     </>
-  )
-}
-
-export default function SearchSection({ items }: SearchSectionProps) {
-  return (
-    <SearchProvider items={items}>
-      <SearchContent />
-    </SearchProvider>
   )
 }
