@@ -1,29 +1,28 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import FilterableList from '../FilterableList'
+import SearchSection from '../SearchSection'
 import { items } from '../../data/items'
 import { describe, it, expect } from 'vitest'
-import React from 'react'
 
-describe('FilterableList', () => {
+describe('SearchSection', () => {
   it('renders all items initially', () => {
-    render(<FilterableList />)
+    render(<SearchSection items={items} />)
     items.forEach((item) => {
       expect(screen.getByText(item.title)).toBeInTheDocument()
     })
   })
 
   it('filters items by search query', () => {
-    render(<FilterableList />)
+    render(<SearchSection items={items} />)
     const searchInput = screen.getByPlaceholderText('Search experiences...')
 
     fireEvent.change(searchInput, { target: { value: 'Mountain' } })
 
-    expect(screen.getByText('Mountain Trek')).toBeInTheDocument()
+    expect(screen.getByText('Mountain')).toBeInTheDocument()
     expect(screen.queryByText('Beach Resort')).not.toBeInTheDocument()
   })
 
   it('filters items by category', () => {
-    render(<FilterableList />)
+    render(<SearchSection items={items} />)
     const categorySelect = screen.getByRole('combobox')
 
     fireEvent.change(categorySelect, { target: { value: 'Adventure' } })
@@ -34,7 +33,7 @@ describe('FilterableList', () => {
   })
 
   it('shows no results message when no items match', () => {
-    render(<FilterableList />)
+    render(<SearchSection items={items} />)
     const searchInput = screen.getByPlaceholderText('Search experiences...')
 
     fireEvent.change(searchInput, { target: { value: 'nonexistent' } })
@@ -45,14 +44,14 @@ describe('FilterableList', () => {
   })
 
   it('combines search and category filters', () => {
-    render(<FilterableList />)
+    render(<SearchSection items={items} />)
     const searchInput = screen.getByPlaceholderText('Search experiences...')
     const categorySelect = screen.getByRole('combobox')
 
     fireEvent.change(searchInput, { target: { value: 'Mountain' } })
     fireEvent.change(categorySelect, { target: { value: 'Adventure' } })
 
-    expect(screen.getByText('Mountain Trek')).toBeInTheDocument()
+    expect(screen.getByText('Mountain')).toBeInTheDocument()
     expect(screen.queryByText('Forest Camping')).not.toBeInTheDocument()
   })
 })

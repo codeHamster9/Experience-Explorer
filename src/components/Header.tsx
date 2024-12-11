@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { UserButton, SignedIn } from '@clerk/clerk-react'
+import React from 'react'
 
 export default function Header() {
   return (

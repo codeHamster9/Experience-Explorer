@@ -1,7 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import SearchBar from '../SearchBar'
 import { describe, vi, beforeEach, it, expect } from 'vitest'
-import React from 'react'
 
 describe('SearchBar', () => {
   const mockOnChange = vi.fn()

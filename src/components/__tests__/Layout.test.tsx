@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import { BrowserRouter } from 'react-router-dom'
-import { ClerkProvider } from '@clerk/clerk-react'
+import { BrowserRouter, Outlet } from 'react-router-dom'
+import { ClerkProvider, SignedIn } from '@clerk/clerk-react'
 import Layout from '../Layout'
 import { vi, describe, it, expect } from 'vitest'
 
@@ -17,19 +17,29 @@ vi.mock('@clerk/clerk-react', () => ({
     return <>{children}</>
   },
   UserButton: () => <div data-testid="user-button">User Button</div>,
+  SignedIn: ({ children }: { children: React.ReactNode }) => <>{children}</>
 }))
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom')
+
+  return {
+    ...actual,
+    BrowserRouter: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    Outlet: () => <div data-testid="outlet">Outlet Content</div>
+  }
+})
 
 describe('Layout', () => {
   it('renders header with title and user button', () => {
     render(
       <ClerkProvider publishableKey="test">
-        <BrowserRouter>
-          <Layout />
-        </BrowserRouter>
+        <Layout />
       </ClerkProvider>
     )
 
     expect(screen.getByText('Experience Explorer')).toBeInTheDocument()
     expect(screen.getByTestId('user-button')).toBeInTheDocument()
+    expect(screen.getByTestId('outlet')).toBeInTheDocument()
   })
 })

@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/react'
 import ItemCard from '../ItemCard'
 import { Item } from '../../types'
 import { describe, it, expect } from 'vitest'
-import React from 'react'
 
 describe('ItemCard', () => {
   const mockItem: Item = {
