@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import ItemCard from './ItemCard'
 import { Item } from '../types' 
-import {searchQueryAtom, selectedCategoryAtom} from '../../../store/searchAtoms'
+import {searchQueryAtom, selectedCategoryAtom} from '@/store/searchAtoms'
 import { useAtom } from 'jotai/react'
 
 interface ItemGridProps {

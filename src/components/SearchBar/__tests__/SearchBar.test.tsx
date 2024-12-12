@@ -2,13 +2,12 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import SearchBar from '../SearchBar'
 import { Provider } from 'jotai'
 import { describe, it, expect } from 'vitest'
-import React from 'react'
 
 describe('SearchBar', () => {
   it('renders with placeholder text', () => {
     render(
       <Provider>
-        <SearchBar />
+        <SearchBar placeholder="Search experiences..." />
       </Provider>
     )
     expect(
@@ -19,7 +18,7 @@ describe('SearchBar', () => {
   it('updates search value on input', () => {
     render(
       <Provider>
-        <SearchBar />
+        <SearchBar placeholder="Search experiences..." />
       </Provider>
     )
     const input = screen.getByPlaceholderText('Search experiences...')
@@ -30,7 +29,7 @@ describe('SearchBar', () => {
 
   it('renders search icon', () => {
     render(
-      <Provider>
+      <Provider>  
         <SearchBar />
       </Provider>
     )

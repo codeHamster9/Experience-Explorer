@@ -1,9 +1,9 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import { Provider } from 'jotai'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import PokemonPage from '../../pages/pokemonPage'
+import PokemonPage from '@/pages/pokemonPage'
 import { describe, it, expect, vi } from 'vitest'
-import React from 'react'
+import { ReactNode } from 'react'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,7 +13,7 @@ const queryClient = new QueryClient({
   },
 })
 
-vi.mock('../../services/pokemonService', () => ({
+vi.mock('@/services/pokemonService', () => ({
   usePokemon: () => ({
     data: {
       id: 1,
@@ -27,7 +27,7 @@ vi.mock('../../services/pokemonService', () => ({
 }))
 
 describe('PokemonPage', () => {
-  const wrapper = ({ children }: { children: React.ReactNode }) => (
+  const wrapper = ({ children }: { children: ReactNode }) => (
     <QueryClientProvider client={queryClient}>
       <Provider>{children}</Provider>
     </QueryClientProvider>
