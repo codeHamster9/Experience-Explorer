@@ -4,24 +4,22 @@ export interface Pokemon {
   sprites: {
     front_default: string;
   };
-  stats: {
+  stats: Array<{
     base_stat: number;
-    stat: {
-      name: string;
-    };
-  }[];
-  moves: {
+  }>;
+  moves: Array<{
     move: {
       name: string;
       url: string;
     };
-  }[];
+  }>;
 }
 
 export interface Move {
   name: string;
   power: number;
   accuracy: number;
+  pp: number;
   type: {
     name: string;
   };
