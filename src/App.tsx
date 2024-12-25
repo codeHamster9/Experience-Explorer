@@ -15,7 +15,7 @@ function App() {
   return (
     <ErrorBoundary>
       <ClerkProvider publishableKey={VITE_CLERK_PUBLISHABLE_KEY}>
-        <BrowserRouter>
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route
