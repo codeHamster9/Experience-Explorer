@@ -1,5 +1,5 @@
 import { atom } from 'jotai'
-import { Pokemon } from '../types/pokemon'
+import { Pokemon } from '../features/pokemon/types/pokemon'
 import { atomWithReset } from 'jotai/utils'
 
 interface PokemonPlayer {
@@ -27,7 +27,7 @@ export const currentTurnAtom = atom(
 // Action atoms
 export const initGameAtom = atom(
   null,
-  (get, set) => {
+  (_, set) => {
     // Reset both players with new IDs
     set(pokemonsAtom, {})
     set(player1IdAtom, getRandomPokemonId())
