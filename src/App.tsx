@@ -1,16 +1,16 @@
-import { ClerkProvider, SignIn, SignedIn, SignedOut } from '@clerk/clerk-react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import HomePage from './pages/HomePage'
-import Layout from './components/Layout'
-import ErrorBoundary from './components/ErrorBoundary'
-import PokemonPage from './pages/pokemonPage'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ThemeProvider } from './context/ThemeContext'
+import { ClerkProvider, SignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import Layout from "./components/Layout";
+import ErrorBoundary from "./components/ErrorBoundary";
+import PokemonPage from "./pages/pokemonPage";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider } from "./context/ThemeContext";
 
-const VITE_CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const VITE_CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!VITE_CLERK_PUBLISHABLE_KEY) {
-  throw new Error('Missing Publishable Key')
+  throw new Error("Missing Publishable Key");
 }
 
 const queryClient = new QueryClient({
@@ -20,7 +20,7 @@ const queryClient = new QueryClient({
       gcTime: 1000 * 60 * 30, // 30 minutes
     },
   },
-})
+});
 
 function App() {
   return (
@@ -46,14 +46,7 @@ function App() {
                       </>
                     }
                   />
-                  <Route
-                    path="/pokemon-battle"
-                    element={
-                      <SignedIn>
-                        <PokemonPage />
-                      </SignedIn>
-                    }
-                  />
+                  <Route path="/pokemon-battle" element={<PokemonPage />} />
                 </Route>
               </Routes>
             </BrowserRouter>
@@ -61,7 +54,7 @@ function App() {
         </ThemeProvider>
       </ErrorBoundary>
     </QueryClientProvider>
-  )
+  );
 }
 
-export default App
+export default App;
